@@ -22,33 +22,43 @@
                     <p id="demo" class="text-primary fs-1 position-absolute top-50 start-50 translate-middle fw-bold"></p>
 
                     <script>
-                        // Set the countdown to 35 days from now
-                        var countDownDate = new Date().getTime() + (2190 * 24 * 60 * 60 * 1000);
+                        // Target: oggi + 6 anni
+                        var target = new Date();
+                        target.setFullYear(target.getFullYear() + 6);
 
-                        // Update the count down every 1 second
+                        // Update il countdown ogni secondo
                         var x = setInterval(function() {
+                            var now = new Date();
 
-                        // Get today's date and time
-                        var now = new Date().getTime();
+                            // Calcolo differenze element-wise
+                            var years = target.getFullYear() - now.getFullYear();
+                            var months = target.getMonth() - now.getMonth();
+                            var days = target.getDate() - now.getDate();
+                            var hours = target.getHours() - now.getHours();
+                            var minutes = target.getMinutes() - now.getMinutes();
+                            var seconds = target.getSeconds() - now.getSeconds();
 
-                        // Find the distance between now and the count down date
-                        var distance = countDownDate - now;
+                            // Normalizza con prestiti
+                            if (seconds < 0) { seconds += 60; minutes--; }
+                            if (minutes < 0) { minutes += 60; hours--; }
+                            if (hours < 0) { hours += 24; days--; }
+                            if (days < 0) {
+                                // giorni del mese precedente rispetto al mese target
+                                var prevMonthDays = new Date(target.getFullYear(), target.getMonth(), 0).getDate();
+                                days += prevMonthDays;
+                                months--;
+                            }
+                            if (months < 0) { months += 12; years--; }
 
-                        // Time calculations for days, hours, minutes and seconds
-                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                            // Se il target è passato
+                            if (years < 0) {
+                                clearInterval(x);
+                                document.getElementById('demo').innerHTML = 'SCADUTO';
+                                return;
+                            }
 
-                        // Display the result in the element with id="demo"
-                        document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-                        + minutes + "m " + seconds + "s ";
-
-                        // If the count down is finished, write some text
-                        if (distance < 0) {
-                            clearInterval(x);
-                            document.getElementById("demo").innerHTML = "EXPIRED";
-                        }
+                            // Mostra in italiano
+                            document.getElementById('demo').innerHTML = years + ' anni ' + months + ' mesi ' + days + ' gg ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
                         }, 1000);
                     </script>
                 </div>
