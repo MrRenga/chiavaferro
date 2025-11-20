@@ -22,15 +22,14 @@
                     <p id="demo" class="text-primary fs-1 position-absolute top-50 start-50 translate-middle fw-bold"></p>
 
                     <script>
-                        // Target: oggi + 6 anni
-                        var target = new Date();
-                        target.setFullYear(target.getFullYear() + 6);
+                        // Target: 20 novembre 2031 alle 00:00:00
+                        var target = new Date('November 20, 2031 00:00:00');
 
-                        // Update il countdown ogni secondo
+                        // Aggiorna il countdown ogni secondo
                         var x = setInterval(function() {
                             var now = new Date();
 
-                            // Calcolo differenze element-wise
+                            // Differenze elemento per elemento tra target e ora corrente
                             var years = target.getFullYear() - now.getFullYear();
                             var months = target.getMonth() - now.getMonth();
                             var days = target.getDate() - now.getDate();
@@ -38,12 +37,12 @@
                             var minutes = target.getMinutes() - now.getMinutes();
                             var seconds = target.getSeconds() - now.getSeconds();
 
-                            // Normalizza con prestiti
+                            // Normalizza con prestiti (borrow)
                             if (seconds < 0) { seconds += 60; minutes--; }
                             if (minutes < 0) { minutes += 60; hours--; }
                             if (hours < 0) { hours += 24; days--; }
                             if (days < 0) {
-                                // giorni del mese precedente rispetto al mese target
+                                // giorni del mese precedente rispetto al mese del target
                                 var prevMonthDays = new Date(target.getFullYear(), target.getMonth(), 0).getDate();
                                 days += prevMonthDays;
                                 months--;
@@ -51,13 +50,13 @@
                             if (months < 0) { months += 12; years--; }
 
                             // Se il target è passato
-                            if (years < 0) {
+                            if (years < 0 || (years === 0 && months === 0 && days === 0 && hours === 0 && minutes === 0 && seconds <= 0)) {
                                 clearInterval(x);
                                 document.getElementById('demo').innerHTML = 'SCADUTO';
                                 return;
                             }
 
-                            // Mostra in italiano
+                            // Mostra il tempo rimanente in italiano
                             document.getElementById('demo').innerHTML = years + ' anni ' + months + ' mesi ' + days + ' gg ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
                         }, 1000);
                     </script>
